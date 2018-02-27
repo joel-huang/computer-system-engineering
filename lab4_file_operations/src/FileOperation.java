@@ -1,17 +1,19 @@
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 
 public class FileOperation {
+
     private static File currentDirectory = new File(System.getProperty("user.dir"));
+    private static int referenceDepth;
+
     public static void main(String[] args) throws java.io.IOException {
 
         String commandLine;
@@ -40,44 +42,107 @@ public class FileOperation {
             String[] commandStr = commandLine.split(" ");
             ArrayList<String> command = new ArrayList<String>();
             for (int i = 0; i < commandStr.length; i++) {
-                command.add(commandStr[i]);
+                // allow space errors
+                if (!commandStr[i].equalsIgnoreCase("")) {
+                    command.add(commandStr[i]);
+                }
             }
 
-            // TODO: implement code to handle create here
-
-            // TODO: implement code to handle delete here
-
-            // TODO: implement code to handle display here
-
-            // TODO: implement code to handle list here
-
-            // TODO: implement code to handle find here
-
-            // TODO: implement code to handle tree here
-
-            // other commands
-            ProcessBuilder pBuilder = new ProcessBuilder(command);
-            pBuilder.directory(currentDirectory);
-            try{
-                Process process = pBuilder.start();
-                // obtain the input stream
-                InputStream is = process.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-
-                // read what is returned by the command
-                String line;
-                while ( (line = br.readLine()) != null)
-                    System.out.println(line);
-
-                // close BufferedReader
-                br.close();
+            if (command.get(0).equalsIgnoreCase("create")) {
+                if (command.size() == 2) {
+                    Java_create(currentDirectory, command.get(1));
+                } else {
+                    System.out.println("Invaild arguments.");
+                }
             }
-            // catch the IOexception and resume waiting for commands
-            catch (IOException ex){
-                System.out.println(ex);
-                continue;
+
+            else if (command.get(0).equalsIgnoreCase("delete")) {
+                if (command.size() == 2) {
+                    Java_delete(currentDirectory, command.get(1));
+                } else {
+                    System.out.println("Invaild arguments.");
+                }
             }
+
+            else if (command.get(0).equalsIgnoreCase("display")) {
+                if (command.size() == 2) {
+                    Java_cat(currentDirectory, command.get(1));
+                } else {
+                    System.out.println("Invaild arguments.");
+                }
+            }
+
+            else if (command.get(0).equalsIgnoreCase("list")) {
+                if (command.size() == 1) Java_ls(currentDirectory, "none", "none");
+
+                else if (command.size() == 2) {
+                    if (command.get(1).equalsIgnoreCase("property")) Java_ls(currentDirectory, command.get(1), "none");
+                    else System.out.println("Invalid argument.");
+                }
+                else if (command.size() == 3) {
+                    if (command.get(1).equalsIgnoreCase("property")
+                            && (command.get(2).equalsIgnoreCase("time")
+                            || command.get(2).equalsIgnoreCase("size")
+                            || command.get(2).equalsIgnoreCase("name")
+                    )) Java_ls(currentDirectory, command.get(1), command.get(2));
+                    else System.out.println("Invalid arguments.");
+                } else {
+                    System.out.println("Invalid arguments.");
+                }
+            }
+
+            else if (command.get(0).equalsIgnoreCase("find")) {
+                if (command.size() == 2) {
+                    Java_find(currentDirectory, command.get(1));
+                } else {
+                    System.out.println("Invaild arguments.");
+                }
+            }
+
+            else if (command.get(0).equalsIgnoreCase("tree")) {
+                if (command.size() == 2) {
+                    if (Integer.valueOf(command.get(1)) instanceof Integer) {
+                        referenceDepth = Integer.valueOf(command.get(1));
+                        Java_tree(currentDirectory, Integer.valueOf(command.get(1)), "none");
+                    } else System.out.println("Invalid argument.");
+                }
+                else if (command.size() == 3) {
+                    if (Integer.valueOf(command.get(1)) instanceof Integer) {
+                        referenceDepth = Integer.valueOf(command.get(1));
+                        Java_tree(currentDirectory, Integer.valueOf(command.get(1)), command.get(2));
+                    } else System.out.println("Invalid argument.");
+                } else {
+                    System.out.println("Invalid argument(s).");
+                }
+            }
+
+            else {
+
+                ProcessBuilder pBuilder = new ProcessBuilder(command);
+                pBuilder.directory(currentDirectory);
+
+                try{
+                    Process process = pBuilder.start();
+                    // obtain the input stream
+                    InputStream is = process.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+                    BufferedReader br = new BufferedReader(isr);
+
+                    // read what is returned by the command
+                    String line;
+                    while ( (line = br.readLine()) != null)
+                        System.out.println(line);
+
+                    // close BufferedReader
+                    br.close();
+                }
+                // catch the IOexception and resume waiting for commands
+                catch (IOException ex){
+                    System.out.println(ex);
+                    continue;
+                }
+            }
+
         }
     }
 
@@ -86,8 +151,9 @@ public class FileOperation {
      * @param dir - current working directory
      * @param name - name of the file to be created
      */
-    public static void Java_create(File dir, String name) {
-        // TODO: create a file
+    public static void Java_create(File dir, String name) throws IOException {
+        File file = new File(dir, name);
+        file.createNewFile();
     }
 
     /**
@@ -96,7 +162,8 @@ public class FileOperation {
      * @param name - name of the file to be deleted
      */
     public static void Java_delete(File dir, String name) {
-        // TODO: delete a file
+        File file = new File(dir, name);
+        file.delete();
     }
 
     /**
@@ -105,7 +172,18 @@ public class FileOperation {
      * @param name - name of the file to be displayed
      */
     public static void Java_cat(File dir, String name) {
-        // TODO: display a file
+        try {
+        File file = new File(dir, name);
+        FileReader fileReader = new FileReader(file);
+        BufferedReader in = new BufferedReader(fileReader);
+        String line;
+        while((line = in.readLine())!= null){
+            System.out.println(line);
+        }
+        in.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -148,7 +226,21 @@ public class FileOperation {
      * @param sort_method - control the sort type
      */
     public static void Java_ls(File dir, String display_method, String sort_method) {
-        // TODO: list files
+        File[] list = dir.listFiles();
+
+        if (display_method.equalsIgnoreCase("property")) {
+            if (!sort_method.equalsIgnoreCase("none")) sortFileList(list, sort_method);
+            for (File file : list) {
+                String fileName = file.getName();
+                long fileLength = file.length();
+                Date lastModified = new Date(file.lastModified());
+                System.out.println(fileName + " Size: " + fileLength + " Last Modified: " + lastModified);
+            }
+        } else {
+            for (File file : list) {
+                System.out.println(file.getName());
+            }
+        }
     }
 
     /**
@@ -159,7 +251,18 @@ public class FileOperation {
      */
     public static boolean Java_find(File dir, String name) {
         boolean flag = false;
-        // TODO: find files
+
+        // if is dir, enter it, iterate through it, then exit it.
+        for (File file : dir.listFiles()) {
+            if (file.isDirectory()) {
+                Java_find(file, name);
+            }
+            if (file.getAbsolutePath().contains(name)) {
+                flag = true;
+                System.out.println(file.getAbsolutePath());
+            }
+        }
+
         return flag;
     }
 
@@ -170,9 +273,28 @@ public class FileOperation {
      * @param sort_method - control the sort type
      */
     public static void Java_tree(File dir, int depth, String sort_method) {
-        // TODO: print file tree
+
+        if (depth <= 0) return;
+
+        File[] fileList = dir.listFiles();
+        if (sort_method.equalsIgnoreCase("time")) sortFileList(fileList, "time");
+        else if (sort_method.equalsIgnoreCase("size")) sortFileList(fileList, "size");
+        else if (sort_method.equalsIgnoreCase("name")) sortFileList(fileList, "name");
+
+        String drawBranch = "|-";
+        for (int i = 0; i < referenceDepth - depth; i++) {
+            drawBranch = " " + drawBranch;
+        }
+
+        for (File file: fileList) {
+            if (file.isDirectory()) {
+                System.out.println(drawBranch + file.getAbsolutePath());
+                depth--;
+                Java_tree(file, depth, sort_method);
+                depth++;
+            } else {
+                System.out.println(drawBranch + file.getAbsolutePath());
+            }
+        }
     }
-
-    // TODO: define other functions if necessary for the above functions
-
 }
