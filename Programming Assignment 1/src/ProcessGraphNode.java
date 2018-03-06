@@ -26,7 +26,7 @@ public class ProcessGraphNode {
         this.runnable = true;
     }
 
-    public void setNotRunable() {this.runnable = false;}
+    public void setNotRunnable() {this.runnable = false;}
 
     public void setExecuted() {
         this.executed = true;

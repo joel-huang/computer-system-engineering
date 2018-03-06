@@ -20,15 +20,15 @@ public class ProcessGraph {
                     nodes) {
                 System.out.print("Node "+ node.getNodeId()+": \nParent: ");
                 if (node.getParents().isEmpty()) System.out.print("none");
-                for (ProcessGraphNode parentnode :
+                for (ProcessGraphNode parentNode :
                         node.getParents()) {
-                    System.out.print(parentnode.getNodeId() + " ");
+                    System.out.print(parentNode.getNodeId() + " ");
                 }
                 System.out.print(" \nChildren: ");
                 if (node.getChildren().isEmpty()) System.out.print("none");
-                for (ProcessGraphNode childnode :
+                for (ProcessGraphNode childNode :
                         node.getChildren()) {
-                    System.out.print(childnode.getNodeId() + " ");
+                    System.out.print(childNode.getNodeId() + " ");
                 }
                 System.out.print("\nCommand: "+node.getCommand()+"    ");
                 System.out.print("\nInput File: "+ node.getInputFile()+"    ");
