@@ -1,0 +1,6 @@
+sleep 1:1:stdin:stdout
+cat ATaleOfTwoCities:2 3 4 5:stdin:outentirebook.txt
+grep Paris:5:ATaleOfTwoCities:outParis.txt
+grep London:5:ATaleOfTwoCities:outLondon.txt
+grep city:5:ATaleOfTwoCities:outcity.txt
+wc outcity.txt outParis.txt outLondon.txt outentirebook.txt:none:stdin:sink.txt
