@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class ParseFile {
@@ -37,12 +38,7 @@ public class ParseFile {
                 ProcessGraph.nodes.get(index).setInputFile(new File(quartiles[2]));
                 //setup output
                 ProcessGraph.nodes.get(index).setOutputFile(new File(quartiles[3]));
-                //setup parent
-                for (ProcessGraphNode node : ProcessGraph.nodes) {
-                    for (ProcessGraphNode childNode : node.getChildren()) {
-                        ProcessGraph.nodes.get(childNode.getNodeId()).addParent(ProcessGraph.nodes.get(node.getNodeId()));
-                    }
-                }
+
                 //mark initial runnable
                 for (ProcessGraphNode node:ProcessGraph.nodes) {
                     if (node.getParents().isEmpty()){
@@ -57,6 +53,17 @@ public class ParseFile {
                 int c = edgeChildren.get(i);
                 ProcessGraph.nodes.get(p).addChild(ProcessGraph.nodes.get(c));
             }
+
+            //setup parent
+            for (ProcessGraphNode node : ProcessGraph.nodes) {
+
+                for (ProcessGraphNode childNode : node.getChildren()) {
+                    ProcessGraph.nodes.get(childNode.getNodeId()).addParent(ProcessGraph.nodes.get(node.getNodeId()));
+                }
+            }
+
+            System.out.println("edgechildren: " + Arrays.toString(edgeChildren.toArray()));
+            System.out.println("edgeparents: " + Arrays.toString(edgeParents.toArray()));
 
         } catch (Exception e){
             System.out.println("File not found!");

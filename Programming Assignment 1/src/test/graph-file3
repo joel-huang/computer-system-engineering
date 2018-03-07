@@ -1,0 +1,6 @@
+echo hi there:1:stdin:z_echo-out.txt
+echo wazzup:2 3:stdin:z_echo2-out.txt
+sleep 1:4:stdin:stdout
+ps:5:stdin:cat-1.txt
+cat:5:z_echo2-out.txt:z_cat-3.txt
+cat z_cat-1.txt z_cat-3.txt:none:stdin:z_sink.txt

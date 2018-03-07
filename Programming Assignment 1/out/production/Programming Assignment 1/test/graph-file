@@ -1,0 +1,7 @@
+sleep 10:1:stdin:stdout
+echo "Process P1 running. Dependency to P4 is cleared.":4:stdin:out1.txt
+sleep 15:3:stdin:stdout
+echo "Process P3 running. Dependency to P4 is cleared.":4:stdin:out2.txt
+cat out1.txt out2.txt:5:stdin:cat-out.txt
+grep 3:6:cat-out.txt:grep-out.txt
+wc -l:none:grep-out.txt:wc-out.txt

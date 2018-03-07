@@ -1,0 +1,10 @@
+echo im 0:3:stdin:z_echo-out.txt
+echo im 1:6:stdin:z_echo-out2.txt
+echo im 3 should be triple:4 5:stdin:z_echo-out3.txt
+cat:6:z_echo-out.txt:z_mid1.txt
+cat:7 8:z_echo-out3.txt:z_mid3.txt
+cat:9:z_echo-out3.txt:z_mid4.txt
+cat z_mid1.txt z_echo-out2.txt:9:stdin:z_mid2.txt
+cat:9:z_mid3.txt:z_mid5.txt
+cat:9:z_mid3.txt:z_mid6.txt
+cat z_mid2.txt z_mid5.txt z_mid6.txt z_mid4.txt:none:stdin:z_result.txt
