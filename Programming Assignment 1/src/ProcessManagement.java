@@ -1,7 +1,12 @@
+/* 
+Programming Assignment 1
+Author : Huang Zhiquan Joel
+ID     : 1002530
+Date   : 03/08/2018 */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
 
 
 // commands tested: echo, grep, cat, ls, ...
