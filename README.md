@@ -40,3 +40,33 @@
 # lab4 - File operations
 
 * Implemented create, delete, list, recursive find and recursive tree operations on directories
+
+
+# lab 5 - Traceroute
+
+* Ping and traceroute practices 
+
+Host    Packet size RTT Min RTT Avg RTT Max Success
+www.csail.mit.edu
+56  6.629   9.378   14.808  100%
+    512 7.101   12.622  32.793  100%
+    1024    8.427   15.761  49.700  100%
+www.berkeley.edu
+56  206.690 220.564 258.607 100%
+    512 209.106 229.268 328.019 100%
+    1024    209.567 215.184 234.341 100%
+www.usyd.edu.au
+56  146.466 153.037 172.515 100%
+    512 146.396 158.615 185.209 100%
+    1024    148.225 158.603 173.055 100%
+www.kyoto-u.ac.jp
+56  90.630  94.716  112.555 100%
+    512 91.421  95.855  119.764 100%
+    1024    91.420  101.139 132.032 100%
+
+# lab 6 - Cryptography
+
+* DES/RSA/MD5
+* Explaining text encryption/decryption using JCE
+* Explaining image encryption/decryption using JCE
+* Explaining message digest using JCE
