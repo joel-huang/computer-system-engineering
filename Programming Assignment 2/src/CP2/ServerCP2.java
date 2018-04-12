@@ -81,7 +81,7 @@ public class ServerCP2 {
             System.out.println("Client: " + inputReader.readLine());
 
             // wait for client to send over the signal to accept the encrypted key
-            while (fromClient.readInt() != -1);
+            while (fromClient.readInt() != -123);
 
             // Get the encrypted session key and decrypt using private key
             int encryptedSessionKeySize = fromClient.readInt();

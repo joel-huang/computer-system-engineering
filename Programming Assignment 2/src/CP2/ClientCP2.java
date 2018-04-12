@@ -96,7 +96,7 @@ public class ClientCP2 {
             // setup buffer and notify server that the session key is coming
             byte[] sessionKeyBuffer = new byte[117];
             ByteArrayInputStream sessionKeyStream = new ByteArrayInputStream(encryptedSessionKey);
-            toServer.writeInt(-1);
+            toServer.writeInt(-123);
             toServer.writeInt(encryptedSessionKey.length);
 
             // write into a buffer of size 117
@@ -126,8 +126,6 @@ public class ClientCP2 {
                 }
             }
             toServer.flush();
-
-
 
 //            int count = 0;
 //            // Send the encrypted file
