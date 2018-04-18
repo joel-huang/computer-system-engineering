@@ -8,7 +8,8 @@ import java.net.Socket;
 public class ClientCP2 {
     public static void main(String[] args) {
 
-        String filename = "audio.mp3";
+        String filename = args[0];//String filename = "audio.mp3";
+        String serverIP = args[1];
 
         Socket clientSocket = null;
 
@@ -26,7 +27,7 @@ public class ClientCP2 {
             System.out.println("Establishing connection to server...");
 
             // Connect to server and get the input and output streams
-            clientSocket = new Socket("127.0.0.1", 4321);
+            clientSocket = new Socket(serverIP, 4321);
 
             toServer = new DataOutputStream(clientSocket.getOutputStream());
             fromServer = new DataInputStream(clientSocket.getInputStream());
@@ -106,7 +107,7 @@ public class ClientCP2 {
             System.out.println("Sent encrypted session key");
 
             // Open the file
-            File file = new File("inputs/" + filename);
+            File file = new File(filename);
             fileInputStream = new FileInputStream(file);
 
             // set up buffer and read the file into it

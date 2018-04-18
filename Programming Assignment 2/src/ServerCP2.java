@@ -19,6 +19,10 @@ public class ServerCP2 {
 
         try {
             welcomeSocket = new ServerSocket(4321);
+
+            // Prints IP
+            System.out.println("Server IP: " + welcomeSocket.getInetAddress().getLocalHost().getHostAddress());
+
             connectionSocket = welcomeSocket.accept();
 
             fromClient = new DataInputStream(connectionSocket.getInputStream());

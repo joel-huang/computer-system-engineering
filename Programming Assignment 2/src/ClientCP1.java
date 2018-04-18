@@ -5,7 +5,8 @@ public class ClientCP1 {
 
     public static void main(String[] args) {
 
-        String filename = "audio.mp3";
+        String filename = args[0]; //String filename = "audio.mp3";
+        String serverIP = args[1];
 
         int numBytes = 0;
 
@@ -27,7 +28,7 @@ public class ClientCP1 {
             System.out.println("Establishing connection to server...");
 
             // Connect to server and get the input and output streams
-            clientSocket = new Socket("127.0.0.1", 4321);
+            clientSocket = new Socket(serverIP, 4321);
 
             toServer = new DataOutputStream(clientSocket.getOutputStream());
             fromServer = new DataInputStream(clientSocket.getInputStream());
@@ -85,7 +86,7 @@ public class ClientCP1 {
             System.out.println("AP completes. Sending file...");
 
             // Open the file
-            fileInputStream = new FileInputStream("inputs/"+filename);
+            fileInputStream = new FileInputStream(filename);
             bufferedFileInputStream = new BufferedInputStream(fileInputStream);
 
             timeStarted = System.nanoTime();
